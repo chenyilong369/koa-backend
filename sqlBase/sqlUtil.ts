@@ -3,7 +3,7 @@
  * @Autor: chenyilong369
  * @Date: 2021-09-21 21:21:42
  * @LastEditors: chenyilong369
- * @LastEditTime: 2021-09-23 23:17:43
+ * @LastEditTime: 2021-09-24 23:44:16
  */
 
 import { LimitSql } from './sqlBase';
@@ -17,8 +17,11 @@ import { LimitSql } from './sqlBase';
 export function connectWhere(params: {[index: string]: any}) {
   if(!params) return '';
   let message = ' where';
-  Object.keys(params).forEach(key => {
-    const tmp = ` ${key}=${params[key]}`;
+  Object.keys(params).forEach((key, index) => {
+    let tmp = '';
+    if (index) {
+      tmp = ` and ${key}=${params[key]}`;
+    } else tmp = ` ${key}=${params[key]}`;
     message += tmp;
   });
   return message;
@@ -59,5 +62,20 @@ export function insertObj(params: {[index: string]: any}): any {
   paramKey += ')';
   value += ')';
   const sql = paramKey + ' values' + value;
+  return sql;
+}
+
+export function connectUpdate(params: {[index: string]: any}) {
+  if(!params) return '';
+  let sql = '';
+  Object.keys(params).forEach((key, index) => {
+    let tmp = ``;
+    if(index === 0) {
+      tmp = `, ${key}=${params[key]}`;
+    } else {
+      tmp = ` ${key}=${params[key]}`
+    }
+    sql += tmp;
+  });
   return sql;
 }

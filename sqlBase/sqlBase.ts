@@ -3,11 +3,11 @@
  * @Autor: chenyilong369
  * @Date: 2021-09-21 20:51:06
  * @LastEditors: chenyilong369
- * @LastEditTime: 2021-09-23 23:19:08
+ * @LastEditTime: 2021-09-24 23:46:25
  */
 
 import { getPromisePool } from './dbPromise';
-import { connectWhere, insertObj, limitSub } from './sqlUtil';
+import { connectUpdate, connectWhere, insertObj, limitSub } from './sqlUtil';
 
 interface SqlBaseConstructor {
   tableName: string;
@@ -27,19 +27,46 @@ export default class SqlBase {
   tableName: string;
   primaryKey: string;
 
-  select(params?: {[index: string]: any}, controlNumber?: LimitSql) {
+  async query(sql: string) {
+    let promisePoolResult = await SqlBase.getPool().query(sql);
+    return promisePoolResult;
+  }
+
+  async getDbData(sql: string) {
+    try {
+      const cnt = await this.query(sql);
+      return cnt;
+    } catch (e) {
+      return e;
+    }
+  }
+
+  async select(params?: {[index: string]: any}, controlNumber?: LimitSql) {
     let sql = `select * from ${this.tableName}`;
     sql += connectWhere(params);
     sql += limitSub(controlNumber);
-    return sql;
+    const ans = await this.getDbData(sql);
+    return ans;
   }
 
-  delete(Id: string) {
-    let sql = `dele`
+  async delete(params?: {[index: string]: any}) {
+    let sql = `delete from ${this.tableName}`;
+    sql += connectWhere(params);
+    const ans = await this.getDbData(sql);
+    return ans;
   }
 
-  insert(params?: {[index: string]: any}) {
+  async insert(params?: {[index: string]: any}) {
     let sql = `insert into ${this.tableName} ${insertObj(params)}`
-    return sql;
+    const ans = await this.getDbData(sql);
+    return ans;
+  }
+
+  async update(params: {[index: string]: any}, controlUpdate: {[index: string]: any}) {
+    let sql = `update ${this.tableName} set`;
+    sql += connectUpdate(params);
+    sql += connectWhere(controlUpdate);
+    const ans = await this.getDbData(sql);
+    return ans;
   }
 }
