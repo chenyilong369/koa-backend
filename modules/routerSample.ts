@@ -3,7 +3,7 @@
  * @Autor: chenyilong369
  * @Date: 2021-09-20 16:12:34
  * @LastEditors: chenyilong369
- * @LastEditTime: 2021-09-21 16:02:32
+ * @LastEditTime: 2021-09-25 12:58:04
  */
 
 import Router, { RouterContext } from 'koa-router';
@@ -19,7 +19,6 @@ export default class RouterSample {
 	
 	base(method: any, path: string, handlerFn: (ctx: RouterContext) => any) {
 		this.Router[method](path, async (ctx: RouterContext, next?: any) => {
-
 			try {
 				const result = await handlerFn(ctx);
 				ctx.body = responseObj(result);

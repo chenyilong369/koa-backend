@@ -3,7 +3,7 @@
  * @Autor: chenyilong369
  * @Date: 2021-09-20 11:40:17
  * @LastEditors: chenyilong369
- * @LastEditTime: 2021-09-21 15:58:07
+ * @LastEditTime: 2021-09-25 11:58:03
  */
 
 import Koa, { Context } from 'koa';
@@ -13,10 +13,12 @@ import loggerMiddleware from './middleware/logger';
 import { errorObj } from './modules/common';
 import { configKeys, getConfig } from './config';
 import apiRoutes from './router/api';
+import { initPool } from './sqlBase/dbPromise';
 
 const PORT = getConfig(configKeys.PORT);
 
 Logger.info('后台服务启动');
+initPool();
 const app = new Koa();
 
 app.use(

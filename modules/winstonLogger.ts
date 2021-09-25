@@ -3,7 +3,7 @@
  * @Autor: chenyilong369
  * @Date: 2021-09-20 12:07:04
  * @LastEditors: chenyilong369
- * @LastEditTime: 2021-09-20 15:16:55
+ * @LastEditTime: 2021-09-25 13:00:28
  */
 import { createLogger, format, Logger, transports } from 'winston';
 import DailyRotateFile from 'winston-daily-rotate-file'
