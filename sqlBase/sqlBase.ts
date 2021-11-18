@@ -3,7 +3,7 @@
  * @Autor: chenyilong369
  * @Date: 2021-09-21 20:51:06
  * @LastEditors: chenyilong369
- * @LastEditTime: 2021-09-25 17:12:14
+ * @LastEditTime: 2021-09-25 17:52:00
  */
 
 import Logger from '../modules/logger';
@@ -28,10 +28,9 @@ export default class SqlBase {
 	tableName: string;
 	primaryKey: string;
 
-	constructor() {
-		this.tableName = '';
-		this.primaryKey = '';
-		this.select = this.select.bind(this);
+	constructor(tableName: string, primaryKey: string) {
+		this.tableName = tableName;
+		this.primaryKey = tableName;
 	}
 
 	query(sql: string, params: any) {
@@ -76,4 +75,12 @@ export default class SqlBase {
 		const [ans] = await this.query(sql, value);
 		return ans;
 	}
+
+  async selectCount(params?: {[index: string]: any}) {
+    let sql = `select count(*) from ${this.tableName}`;
+		sql += connectWhere(params);
+    const value = params ? Object.values(params) : {};
+		const [ans] = await this.query(sql, value);
+    return ans[0]['count(*)'];
+  }
 }
